@@ -1,7 +1,7 @@
 version: '3'
 services:
   vpn:
-    image: n2n:alpine
+    image: abrekhov/n2n:alpine
     cap_add:
     - NET_ADMIN
     devices:
