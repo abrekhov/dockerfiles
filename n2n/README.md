@@ -41,4 +41,11 @@ PING 192.168.100.<Y> (192.168.100.<Y>) 56(84) bytes of data.
 64 bytes from 192.168.100.<Y>: icmp_seq=2 ttl=64 time=0.243 ms
 ```
 
+### If you need to route other subnets
 
+```bash
+# on host A
+ip r add 10.40.2.0/24 via 192.168.100.<Y> # add route to remote subnets via remote peer
+# on host B
+ip r add 10.30.1.0/24 via 192.168.100.<X> # add route to remote subnets via remote peer
+```
