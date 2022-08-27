@@ -9,3 +9,4 @@ FROM alpine
 RUN apk update && apk add dumb-init
 COPY --from=builder /usr/sbin/edge /usr/sbin/edge
 COPY --from=builder /usr/sbin/supernode /usr/sbin/supernode
+ENTRYPOINT [ "dumb-init" ]

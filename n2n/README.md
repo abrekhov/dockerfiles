@@ -5,21 +5,13 @@
 ### Host A
 
 ```bash
-docker run -ti --device /dev/net/tun --cap-add NET_ADMIN --network=host abrekhov/n2n:alpine sh
-
-# Inside container
-edge -c <community> -k <secret_pwd> -a 192.168.100.<X>  -l supernode.ntop.org:7777 
-# ^p^q - detach 
+docker run -ti -e N2N_KEY=<secret_key> -e N2N_COMMUNITY=<mycommunity> --device /dev/net/tun --cap-add NET_ADMIN --network=host -d abrekhov/n2n:alpine edge -lsupernode.ntop.org:7777 -r -f -a192.168.100.<X>
 ```
 
 ### Host B
 
 ```bash
-docker run -ti --device /dev/net/tun --cap-add NET_ADMIN --network=host abrekhov/n2n:alpine sh
-
-# Inside container
-edge -c <community> -k <secret_pwd> -a 192.168.100.<Y>  -l supernode.ntop.org:7777 
-# ^p^q - detach 
+docker run -ti -e N2N_KEY=<secret_key> -e N2N_COMMUNITY=<mycommunity> --device /dev/net/tun --cap-add NET_ADMIN --network=host -d abrekhov/n2n:alpine edge -lsupernode.ntop.org:7777 -r -f -a192.168.100.<Y>
 ```
 
 or
@@ -48,4 +40,13 @@ PING 192.168.100.<Y> (192.168.100.<Y>) 56(84) bytes of data.
 ip r add 10.40.2.0/24 via 192.168.100.<Y> # add route to remote subnets via remote peer
 # on host B
 ip r add 10.30.1.0/24 via 192.168.100.<X> # add route to remote subnets via remote peer
+```
+
+## Cross platform manifests
+
+```bash
+docker manifest create abrekhov/n2n:latest arekhov/n2n:alpine-amd64-linux abrekhov:n2n:alpine-arm64-linux
+docker manifest annotate abrekhov/n2n:latest abrekhov/n2n:alpine-arm64-linux --arch arm
+docker manifest annotate abrekhov/n2n:latest abrekhov/n2n:alpine-amd64-linux --arch amd64
+docker manifest push
 ```
