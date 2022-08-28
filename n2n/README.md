@@ -5,13 +5,13 @@
 ### Host A
 
 ```bash
-docker run -ti -e N2N_KEY=<secret_key> -e N2N_COMMUNITY=<mycommunity> --device /dev/net/tun --cap-add NET_ADMIN --network=host -d abrekhov/n2n:alpine edge -lsupernode.ntop.org:7777 -r -f -a192.168.100.<X>
+docker run -ti -e N2N_KEY=<secret_key> -e N2N_COMMUNITY=<mycommunity> --device /dev/net/tun --cap-add NET_ADMIN --network=host -d abrekhov/n2n:latest edge -lsupernode.ntop.org:7777 -r -f -a192.168.100.<X>
 ```
 
 ### Host B
 
 ```bash
-docker run -ti -e N2N_KEY=<secret_key> -e N2N_COMMUNITY=<mycommunity> --device /dev/net/tun --cap-add NET_ADMIN --network=host -d abrekhov/n2n:alpine edge -lsupernode.ntop.org:7777 -r -f -a192.168.100.<Y>
+docker run -ti -e N2N_KEY=<secret_key> -e N2N_COMMUNITY=<mycommunity> --device /dev/net/tun --cap-add NET_ADMIN --network=host -d abrekhov/n2n:latest edge -lsupernode.ntop.org:7777 -r -f -a192.168.100.<Y>
 ```
 
 or
@@ -42,11 +42,9 @@ ip r add 10.40.2.0/24 via 192.168.100.<Y> # add route to remote subnets via remo
 ip r add 10.30.1.0/24 via 192.168.100.<X> # add route to remote subnets via remote peer
 ```
 
-## Cross platform manifests
+## Cross platform build
 
 ```bash
-docker manifest create abrekhov/n2n:latest arekhov/n2n:alpine-amd64-linux abrekhov:n2n:alpine-arm64-linux
-docker manifest annotate abrekhov/n2n:latest abrekhov/n2n:alpine-arm64-linux --arch arm
-docker manifest annotate abrekhov/n2n:latest abrekhov/n2n:alpine-amd64-linux --arch amd64
-docker manifest push
+docker buildx create --use  
+docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64  --tag abrekhov/n2n:latest .
 ```
